@@ -15,12 +15,12 @@ while True:
     rain24 = rain6 * random.uniform(2.0, 4.0)
     soil = random.uniform(55, 92)
 
-    payload = {
+    payload = { 
         "village": VILLAGE,
         "rain_1h_mm": round(rain1, 1),
         "rain_3h_mm": round(rain3, 1),
         "rain_6h_mm": round(rain6, 1),
-        "rain_24h_mm": round(rain24, 1),
+        "rain_24h_mm": round(rain24, 1), 
         "soil_moisture_pct": round(soil, 1),
     }
 

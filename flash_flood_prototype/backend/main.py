@@ -3,11 +3,13 @@ from datetime import datetime, timezone
 import json
 import joblib
 import numpy as np
-import pandas as pd
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 
 ROOT = Path(__file__).resolve().parents[1]
+FRONTEND_HTML = ROOT / "frontend" / "index.html"
 MODEL_PATH = ROOT / "models" / "flood_model.joblib"
 VILLAGE_PATH = ROOT / "data" / "villages.csv"
 STATE_PATH = ROOT / "data" / "live_state.json"
@@ -16,6 +18,14 @@ app = FastAPI(
     title="Flash Flood Prediction API",
     version="1.0.0",
     description="Hackathon prototype for hyper-local flash flood risk prediction."
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 model_bundle = None
@@ -71,27 +81,17 @@ def predict(name):
         raise HTTPException(status_code=500, detail="Model not trained. Run scripts/train_model.py first.")
     v = village_info(name)
     s = live[name]
-    features = model_bundle["features"]
-    row = pd.DataFrame([{
-        "rain_1h_mm": s["rain_1h_mm"],
-        "rain_3h_mm": s["rain_3h_mm"],
-        "rain_6h_mm": s["rain_6h_mm"],
-        "rain_24h_mm": s["rain_24h_mm"],
-        "soil_moisture_pct": s["soil_moisture_pct"],
-        "slope_deg": v["slope_deg"],
-        "elevation_m": v["elevation_m"],
-        "distance_to_river_m": v["distance_to_river_m"],
-        "historical_events": v["historical_events"]
-    }], columns=features)
+    row = np.array([[
+        s["rain_1h_mm"], s["rain_3h_mm"], s["rain_6h_mm"], s["rain_24h_mm"],
+        s["soil_moisture_pct"], v["slope_deg"], v["elevation_m"],
+        v["distance_to_river_m"], v["historical_events"]
+    ]])
     model = model_bundle["model"]
-    inv_label_order = model_bundle.get("inv_label_order", {0: "LOW", 1: "MEDIUM", 2: "HIGH"})
-    
+    features = model_bundle["features"]
     probs = model.predict_proba(row)[0]
     classes = list(model.classes_)
-    probability_map = {inv_label_order.get(c, str(c)): float(p) for c, p in zip(classes, probs)}
-    
-    risk_encoded = model.predict(row)[0]
-    risk = inv_label_order.get(risk_encoded, str(risk_encoded))
+    probability_map = {c: float(p) for c, p in zip(classes, probs)}
+    risk = str(model.predict(row)[0])
     p_high = probability_map.get("HIGH", 0.0)
     p_medium = probability_map.get("MEDIUM", 0.0)
 
@@ -125,7 +125,15 @@ def predict(name):
 
 @app.get("/")
 def root():
+    if FRONTEND_HTML.exists():
+        return FileResponse(FRONTEND_HTML)
     return {"message": "Flash Flood Prediction API", "docs": "/docs"}
+
+@app.get("/dashboard")
+def dashboard():
+    if FRONTEND_HTML.exists():
+        return FileResponse(FRONTEND_HTML)
+    raise HTTPException(status_code=404, detail="Dashboard frontend not found")
 
 @app.get("/villages")
 def get_villages():

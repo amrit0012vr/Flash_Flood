@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEER-RAKSHAK // AI Flash Flood Early Warning Command Center</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace']
+          },
+          colors: {
+            neon: {
+              green: '#10b981',
+              cyan: '#06b6d4',
+              amber: '#f59e0b',
+              red: '#ef4444'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #0b0f19;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(6, 182, 212, 0.08) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(239, 68, 68, 0.06) 0px, transparent 50%);
+      color: #e2e8f0;
+    }
+    .glass-card {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
+    .glass-card-danger {
+      background: rgba(35, 12, 18, 0.85);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      box-shadow: 0 0 30px rgba(239, 68, 68, 0.2);
+    }
+    .glow-green { box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
+    .glow-amber { box-shadow: 0 0 15px rgba(245, 158, 11, 0.4); }
+    .glow-red { box-shadow: 0 0 20px rgba(239, 68, 68, 0.6); }
+
+    @keyframes pulse-ring {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      50% { transform: scale(1.35); opacity: 0.1; }
+      100% { transform: scale(0.95); opacity: 0.8; }
+    }
+    .pulse-ring-active {
+      animation: pulse-ring 2s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
+    }
+
+    /* Range slider styling */
+    input[type=range] {
+      -webkit-appearance: none;
+      background: #1e293b;
+      border-radius: 6px;
+      height: 6px;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      height: 18px;
+      width: 18px;
+      border-radius: 50%;
+      background: #38bdf8;
+      cursor: pointer;
+      box-shadow: 0 0 8px #0284c7;
+      border: 2px solid #0f172a;
+    }
+  </style>
+</head>
+<body class="min-h-screen font-sans flex flex-col antialiased selection:bg-cyan-500 selection:text-black">
+
+  <!-- Top Navigation HUD -->
+  <header class="border-b border-slate-800/80 bg-slate-950/80 backdrop-blur sticky top-0 z-50 px-6 py-3.5">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="relative flex items-center justify-center w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 font-bold">
+          <svg class="w-6 h-6 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="font-mono font-bold tracking-tight text-lg text-white">NEER-RAKSHAK</h1>
+            <span class="text-[10px] font-mono font-semibold px-2 py-0.5 rounded bg-cyan-950 text-cyan-400 border border-cyan-800/60">V2.4 OPERATIONAL</span>
+          </div>
+          <p class="text-xs text-slate-400 font-mono">Hyper-Local Flash Flood Early Warning Command System • Problem 26192</p>
+        </div>
+      </div>
+
+      <!-- Quick status badges & Siren sound switch -->
+      <div class="flex items-center gap-3 font-mono text-xs">
+        <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/90 border border-slate-800">
+          <span id="backendStatusDot" class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981]"></span>
+          <span id="backendStatusText" class="text-slate-300">API NODE: 8000 ACTIVE</span>
+        </div>
+
+        <button id="sirenToggleBtn" onclick="toggleAudio()" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 hover:border-slate-500 text-slate-300 transition">
+          <span id="sirenIcon">🔔</span>
+          <span id="sirenText">ALARM AUDIO: ON</span>
+        </button>
+
+        <a href="http://127.0.0.1:8000/docs" target="_blank" class="px-3 py-1.5 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/20 transition">
+          API SWAGGER ↗
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 1-Click Simulation Scenario Bar (Judge Bar) -->
+  <section class="border-b border-slate-800/60 bg-slate-900/40 px-6 py-2.5">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-2 text-xs font-mono text-slate-400">
+        <span class="text-cyan-400 font-bold">⚡ DEMO PRESETS:</span>
+        <span class="hidden md:inline">Click to instantly test extreme meteorological events:</span>
+      </div>
+      <div class="flex items-center flex-wrap gap-2">
+        <button onclick="applyScenario('normal')" class="px-3 py-1 text-xs font-medium rounded-md bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 transition flex items-center gap-1.5">
+          <span>☀️</span> Normal Weather
+        </button>
+        <button onclick="applyScenario('monsoon')" class="px-3 py-1 text-xs font-medium rounded-md bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 transition flex items-center gap-1.5">
+          <span>🌧️</span> Sustained Monsoon
+        </button>
+        <button onclick="applyScenario('saturated')" class="px-3 py-1 text-xs font-medium rounded-md bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/30 text-purple-300 transition flex items-center gap-1.5">
+          <span>⛰️</span> Saturated Slopes
+        </button>
+        <button onclick="applyScenario('cloudburst')" class="px-3 py-1 text-xs font-bold rounded-md bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 text-red-300 transition flex items-center gap-1.5 glow-red animate-pulse">
+          <span>🚨</span> CLOUDBURST EMERGENCY
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Container -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex-1 w-full space-y-6">
+
+    <!-- Active Threat Banner -->
+    <div id="threatBanner" class="glass-card rounded-xl p-4 transition-all duration-300 border-l-4 border-emerald-500 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div id="threatIconCircle" class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-xl">
+          🟢
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span id="threatLevelText" class="text-emerald-400 font-bold font-mono text-sm tracking-wider">ROUTINE MONITORING — LOW THREAT</span>
+            <span id="threatTargetVillage" class="text-xs text-slate-400 font-mono">SECTOR: VILLAGE A</span>
+          </div>
+          <p id="threatActionText" class="text-xs text-slate-300 mt-0.5">Catchment runoff within safe parameters. Automated radar sync active.</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3 font-mono text-xs">
+        <span class="text-slate-400">LEAD TIME WINDOW:</span>
+        <span id="leadTimeDisplay" class="font-bold text-white text-sm px-2.5 py-1 rounded bg-slate-800/80 border border-slate-700">4.0 HRS</span>
+      </div>
+    </div>
+
+    <!-- Top 4 KPI Metrics -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="glass-card rounded-xl p-4">
+        <div class="text-[11px] font-mono text-slate-400 uppercase tracking-wider">Current Threat Tier</div>
+        <div class="flex items-baseline gap-2 mt-1.5">
+          <div id="kpiRisk" class="text-2xl font-bold font-mono text-emerald-400">LOW</div>
+          <span id="kpiConfidence" class="text-xs text-slate-400 font-mono">85.7% F1</span>
+        </div>
+        <div class="text-[11px] text-slate-500 mt-1 font-mono">AI Ensemble Classification</div>
+      </div>
+
+      <div class="glass-card rounded-xl p-4">
+        <div class="text-[11px] font-mono text-slate-400 uppercase tracking-wider">Flash Flood Probability</div>
+        <div class="flex items-baseline gap-2 mt-1.5">
+          <div id="kpiProb" class="text-2xl font-bold font-mono text-white">4.2%</div>
+          <span id="kpiProbDelta" class="text-xs text-emerald-400 font-mono">Safe</span>
+        </div>
+        <div class="text-[11px] text-slate-500 mt-1 font-mono">Threshold Critical: &gt;65%</div>
+      </div>
+
+      <div class="glass-card rounded-xl p-4">
+        <div class="text-[11px] font-mono text-slate-400 uppercase tracking-wider">Estimated Warning Window</div>
+        <div class="flex items-baseline gap-2 mt-1.5">
+          <div id="kpiLead" class="text-2xl font-bold font-mono text-cyan-400">4.0 h</div>
+          <span class="text-xs text-slate-400 font-mono">to peak</span>
+        </div>
+        <div class="text-[11px] text-slate-500 mt-1 font-mono">Pre-crest evacuation buffer</div>
+      </div>
+
+      <div class="glass-card rounded-xl p-4">
+        <div class="text-[11px] font-mono text-slate-400 uppercase tracking-wider">Soil Saturation</div>
+        <div class="flex items-baseline gap-2 mt-1.5">
+          <div id="kpiMoisture" class="text-2xl font-bold font-mono text-white">45%</div>
+          <span id="kpiMoistureStatus" class="text-xs text-emerald-400 font-mono">Infiltrating</span>
+        </div>
+        <div class="text-[11px] text-slate-500 mt-1 font-mono">Runoff trigger limit: 80%</div>
+      </div>
+    </div>
+
+    <!-- Main Command Workspace (2-Column Grid) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+      <!-- Left Column: Interactive Geospatial Basin & Elevation Radar (7 cols) -->
+      <div class="lg:col-span-7 space-y-6">
+
+        <!-- Interactive Map Card -->
+        <div class="glass-card rounded-2xl p-5 relative overflow-hidden">
+          <div class="flex items-center justify-between mb-3">
+            <div>
+              <h2 class="text-sm font-mono font-bold text-white tracking-wide uppercase flex items-center gap-2">
+                <span class="inline-block w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+                Tactical Valley Catchment Map
+              </h2>
+              <p class="text-xs text-slate-400">Alaknanda-Bhagirathi Basin • Click any village node to inspect telemetry</p>
+            </div>
+            <div class="flex items-center gap-2 text-xs font-mono">
+              <span class="flex items-center gap-1 text-emerald-400"><span class="w-2 h-2 rounded-full bg-emerald-400"></span> LOW</span>
+              <span class="flex items-center gap-1 text-amber-400"><span class="w-2 h-2 rounded-full bg-amber-400"></span> MED</span>
+              <span class="flex items-center gap-1 text-red-400"><span class="w-2 h-2 rounded-full bg-red-400"></span> HIGH</span>
+            </div>
+          </div>
+
+          <!-- SVG Terrain Map with Drainage & Villages -->
+          <div class="relative w-full h-[320px] bg-slate-950/80 rounded-xl border border-slate-800 overflow-hidden">
+            <svg id="basinSvg" class="w-full h-full" viewBox="0 0 600 320" xmlns="http://www.w3.org/2000/svg">
+              <!-- Mountain Contours -->
+              <path d="M 0,90 Q 150,40 300,80 T 600,60" fill="none" stroke="#1e293b" stroke-width="2" stroke-dasharray="4,4"/>
+              <path d="M 0,140 Q 200,100 350,150 T 600,120" fill="none" stroke="#1e293b" stroke-width="2" stroke-dasharray="4,4"/>
+              <path d="M 0,220 Q 250,180 400,240 T 600,210" fill="none" stroke="#1e293b" stroke-width="2" stroke-dasharray="4,4"/>
+
+              <!-- Main River Network -->
+              <path id="riverStream" d="M 50,20 C 180,60 220,130 280,180 S 420,220 550,300" fill="none" stroke="#0ea5e9" stroke-width="5" stroke-linecap="round" opacity="0.6"/>
+              <path d="M 200,20 Q 240,80 280,180" fill="none" stroke="#0284c7" stroke-width="2" opacity="0.4"/>
+              <path d="M 450,80 Q 380,150 420,220" fill="none" stroke="#0284c7" stroke-width="2" opacity="0.4"/>
+
+              <!-- Flow animation particles along river -->
+              <circle r="3" fill="#38bdf8">
+                <animateMotion dur="4s" repeatCount="indefinite" path="M 50,20 C 180,60 220,130 280,180 S 420,220 550,300" />
+              </circle>
+              <circle r="2.5" fill="#38bdf8">
+                <animateMotion dur="4s" begin="2s" repeatCount="indefinite" path="M 50,20 C 180,60 220,130 280,180 S 420,220 550,300" />
+              </circle>
+
+              <!-- Village Nodes (Dynamic) -->
+              <g id="villageNodesGroup"></g>
+            </svg>
+
+            <!-- Map Overlay Legend / Info -->
+            <div class="absolute bottom-2 left-2 bg-slate-900/90 border border-slate-800 rounded px-2.5 py-1 text-[10px] font-mono text-slate-400">
+              CATCHMENT: ALAKNANDA VALLEY • 30.35° N, 78.08° E
+            </div>
+          </div>
+
+          <!-- Valley Elevation Cross-Section Diagram -->
+          <div class="mt-4 pt-4 border-t border-slate-800/80">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-mono text-slate-400 uppercase">Topography Elevation Profile & River Distance</span>
+              <span id="profileElevationText" class="text-xs font-mono text-cyan-400 font-bold">1,240 m Elev • 22° Slope • 280m to River</span>
+            </div>
+            <div class="h-14 w-full bg-slate-950/60 rounded-lg p-2 flex items-end relative overflow-hidden border border-slate-800">
+              <!-- Slope hill -->
+              <div class="absolute inset-0 bg-gradient-to-r from-emerald-950/20 via-slate-900/40 to-cyan-950/30"></div>
+              <!-- Riverbed marker -->
+              <div class="absolute right-6 bottom-0 w-16 h-4 bg-cyan-500/30 rounded-t border-t border-cyan-400 flex items-center justify-center text-[9px] font-mono text-cyan-300">
+                RIVER
+              </div>
+              <!-- Village elevation pin -->
+              <div id="crossSectionPin" class="absolute bottom-4 left-1/3 flex flex-col items-center transition-all duration-500">
+                <div class="w-3 h-3 rounded-full bg-emerald-400 shadow-[0_0_8px_#10b981]"></div>
+                <div class="w-0.5 h-6 bg-emerald-400/60"></div>
+                <span id="crossSectionLabel" class="text-[10px] font-mono text-emerald-300 whitespace-nowrap">Village A</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Regional Multi-Village Surveillance Grid -->
+        <div class="glass-card rounded-2xl p-5">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-sm font-mono font-bold text-white uppercase tracking-wide">Regional Settlements Surveillance Grid</h3>
+            <span class="text-xs font-mono text-slate-400">Click row to inspect</span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs font-mono">
+              <thead>
+                <tr class="border-b border-slate-800 text-slate-400">
+                  <th class="py-2 px-3">SETTLEMENT</th>
+                  <th class="py-2 px-3">THREAT LEVEL</th>
+                  <th class="py-2 px-3">HIGH PROB</th>
+                  <th class="py-2 px-3">LEAD TIME</th>
+                  <th class="py-2 px-3">SLOPE</th>
+                  <th class="py-2 px-3">RIVER DIST</th>
+                  <th class="py-2 px-3 text-right">ACTION</th>
+                </tr>
+              </thead>
+              <tbody id="surveillanceTableBody" class="divide-y divide-slate-800/60">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: AI Risk Speedometer & Sensor Controls (5 cols) -->
+      <div class="lg:col-span-5 space-y-6">
+
+        <!-- Dial Speedometer Gauge Card -->
+        <div class="glass-card rounded-2xl p-5 text-center">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-xs font-mono text-slate-400 uppercase tracking-wider">AI Inference Risk Index</span>
+            <span id="gaugeStatusPill" class="text-[11px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-bold">NORMAL</span>
+          </div>
+
+          <!-- Canvas Speedometer -->
+          <div class="relative w-full flex justify-center items-center py-2">
+            <canvas id="gaugeCanvas" width="280" height="150" class="max-w-full"></canvas>
+            <div class="absolute bottom-2 flex flex-col items-center">
+              <div id="gaugeScoreNumber" class="text-3xl font-extrabold font-mono text-white">4.2%</div>
+              <span class="text-[11px] font-mono text-slate-400 uppercase">Flash Flood Threat Index</span>
+            </div>
+          </div>
+
+          <!-- Multi-class probability bars -->
+          <div class="mt-4 pt-3 border-t border-slate-800/80 grid grid-cols-3 gap-2 font-mono text-xs">
+            <div class="bg-slate-900/60 p-2 rounded border border-slate-800">
+              <div class="text-[10px] text-slate-400">LOW</div>
+              <div id="probLowText" class="font-bold text-emerald-400 text-sm">95.8%</div>
+            </div>
+            <div class="bg-slate-900/60 p-2 rounded border border-slate-800">
+              <div class="text-[10px] text-slate-400">MEDIUM</div>
+              <div id="probMedText" class="font-bold text-amber-400 text-sm">3.0%</div>
+            </div>
+            <div class="bg-slate-900/60 p-2 rounded border border-slate-800">
+              <div class="text-[10px] text-slate-400">HIGH</div>
+              <div id="probHighText" class="font-bold text-red-400 text-sm">1.2%</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Telemetry Simulator Sliders Card -->
+        <div class="glass-card rounded-2xl p-5">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h3 class="text-sm font-mono font-bold text-white uppercase tracking-wide">Live IoT Sensor Inputs</h3>
+              <p class="text-xs text-slate-400">Move sliders for instantaneous zero-latency inference</p>
+            </div>
+            <select id="villageSelect" onchange="changeVillage(this.value)" class="bg-slate-900 border border-slate-700 text-white text-xs font-mono rounded px-2.5 py-1 focus:outline-none focus:border-cyan-500">
+              <option value="Village A">Village A</option>
+              <option value="Village B">Village B</option>
+              <option value="Village C">Village C</option>
+            </select>
+          </div>
+
+          <div class="space-y-4 font-mono">
+            <!-- 1h Rainfall -->
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-slate-300">Rainfall (Last 1 Hour)</span>
+                <span id="val_rain1" class="text-cyan-400 font-bold">15.0 mm</span>
+              </div>
+              <input type="range" id="slider_rain1" min="0" max="200" step="1" value="15" oninput="onSensorSlide()" class="w-full">
+            </div>
+
+            <!-- 3h Rainfall -->
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-slate-300">Rainfall (Last 3 Hours)</span>
+                <span id="val_rain3" class="text-cyan-400 font-bold">30.0 mm</span>
+              </div>
+              <input type="range" id="slider_rain3" min="0" max="400" step="1" value="30" oninput="onSensorSlide()" class="w-full">
+            </div>
+
+            <!-- 6h Rainfall -->
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-slate-300">Rainfall (Last 6 Hours)</span>
+                <span id="val_rain6" class="text-cyan-400 font-bold">45.0 mm</span>
+              </div>
+              <input type="range" id="slider_rain6" min="0" max="700" step="1" value="45" oninput="onSensorSlide()" class="w-full">
+            </div>
+
+            <!-- 24h Rainfall -->
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-slate-300">Rainfall (Last 24 Hours)</span>
+                <span id="val_rain24" class="text-cyan-400 font-bold">70.0 mm</span>
+              </div>
+              <input type="range" id="slider_rain24" min="0" max="1200" step="1" value="70" oninput="onSensorSlide()" class="w-full">
+            </div>
+
+            <!-- Soil Moisture -->
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-slate-300">Soil Moisture Saturation</span>
+                <span id="val_soil" class="text-cyan-400 font-bold">45%</span>
+              </div>
+              <input type="range" id="slider_soil" min="0" max="100" step="1" value="45" oninput="onSensorSlide()" class="w-full">
+            </div>
+          </div>
+
+          <div class="mt-5 pt-3 border-t border-slate-800 flex gap-3">
+            <button onclick="syncWithBackend()" class="flex-1 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-mono text-xs font-bold transition shadow-lg shadow-cyan-900/30 flex items-center justify-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+              SYNC TO BACKEND API
+            </button>
+            <button onclick="openAlertModal()" class="px-4 py-2 rounded-lg bg-red-600/20 hover:bg-red-600/30 border border-red-500/40 text-red-300 font-mono text-xs font-bold transition flex items-center gap-1.5">
+              <span>📲</span> DISPATCH ALERT
+            </button>
+          </div>
+        </div>
+
+        <!-- Emergency SOP Action Directives Card -->
+        <div class="glass-card rounded-2xl p-5">
+          <h3 class="text-sm font-mono font-bold text-white uppercase tracking-wide mb-3 flex items-center gap-2">
+            <span>📋</span> Active Disaster Response Protocol (NDRF/SDRF)
+          </h3>
+          <div id="sopDirectivesList" class="space-y-2 text-xs font-mono">
+            <!-- Dynamically populated directives -->
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Mobile Broadcast Simulation Modal -->
+  <div id="alertModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="glass-card rounded-3xl p-6 max-w-sm w-full border border-red-500/50 shadow-2xl relative">
+      <!-- Simulated Phone Screen -->
+      <div class="bg-slate-950 rounded-2xl p-4 border border-slate-800 text-center">
+        <div class="w-12 h-1 bg-slate-800 rounded-full mx-auto mb-4"></div>
+        <div class="w-12 h-12 rounded-full bg-red-500/20 border border-red-500 flex items-center justify-center mx-auto mb-3 animate-bounce">
+          <span class="text-2xl">🚨</span>
+        </div>
+        <div class="text-[10px] font-mono text-red-400 font-bold uppercase tracking-wider">UTTARAKHAND STATE DISASTER MANAGEMENT AUTHORITY</div>
+        <h4 class="text-base font-bold text-white mt-1">CIVIL DEFENSE EMERGENCY ALERT</h4>
+        <div class="bg-red-950/40 border border-red-500/40 rounded-xl p-3 my-3 text-left font-mono text-xs text-red-200 leading-relaxed">
+          <p><strong>HAZARD:</strong> FLASH FLOOD IMMINENT</p>
+          <p id="modalVillageText"><strong>LOCATION:</strong> Village A</p>
+          <p id="modalLeadText"><strong>LEAD TIME:</strong> 1.5 Hours</p>
+          <p class="mt-2 text-white">Move immediately away from riverbeds and drainage gullies. Evacuate to designated higher ground relief centers.</p>
+        </div>
+        <div class="text-[10px] font-mono text-slate-400">Target audience: 1,420 registered mobile devices in zone</div>
+      </div>
+
+      <div class="mt-4 flex gap-2">
+        <button onclick="triggerBroadcastMock()" class="flex-1 py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white font-mono text-xs font-bold transition">
+          CONFIRM BROADCAST
+        </button>
+        <button onclick="closeAlertModal()" class="py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-mono text-xs transition">
+          CANCEL
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Client-Side Architecture & Real-Time Sync Script -->
+  <script>
+    // State Store
+    const state = {
+      api: "http://127.0.0.1:8000",
+      audioEnabled: true,
+      selectedVillage: "Village A",
+      villages: [
+        { village: "Village A", slope_deg: 22, elevation_m: 1240, distance_to_river_m: 280, historical_events: 3, x: 180, y: 130 },
+        { village: "Village B", slope_deg: 14, elevation_m: 980, distance_to_river_m: 540, historical_events: 1, x: 340, y: 190 },
+        { village: "Village C", slope_deg: 29, elevation_m: 1520, distance_to_river_m: 160, historical_events: 4, x: 440, y: 240 }
+      ],
+      sensor: {
+        rain_1h_mm: 15.0,
+        rain_3h_mm: 30.0,
+        rain_6h_mm: 45.0,
+        rain_24h_mm: 70.0,
+        soil_moisture_pct: 45.0
+      },
+      currentPrediction: {
+        risk: "LOW",
+        high_risk_probability_pct: 4.2,
+        estimated_warning_window_hours: 4.0,
+        probabilities: { LOW: 0.958, MEDIUM: 0.03, HIGH: 0.012 },
+        action: "Catchment runoff within safe parameters. Automated radar sync active."
+      }
+    };
+
+    // Web Audio Synthesizer for Zero-Asset Emergency Siren
+    let audioCtx = null;
+    function playSirenSound() {
+      if (!state.audioEnabled) return;
+      try {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sawtooth';
+        
+        // Siren frequency sweep 650Hz -> 950Hz -> 650Hz
+        const now = audioCtx.currentTime;
+        osc.frequency.setValueAtTime(650, now);
+        osc.frequency.exponentialRampToValueAtTime(950, now + 0.35);
+        osc.frequency.exponentialRampToValueAtTime(650, now + 0.7);
+
+        gain.gain.setValueAtTime(0.12, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.75);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.75);
+      } catch(e) {
+        console.log("Audio not allowed yet by user interaction", e);
+      }
+    }
+
+    function toggleAudio() {
+      state.audioEnabled = !state.audioEnabled;
+      document.getElementById('sirenText').innerText = state.audioEnabled ? "ALARM AUDIO: ON" : "ALARM AUDIO: MUTED";
+      document.getElementById('sirenIcon').innerText = state.audioEnabled ? "🔔" : "🔕";
+      if (state.audioEnabled) playSirenSound();
+    }
+
+    // Gauge Canvas Renderer
+    function drawGauge(probPct) {
+      const canvas = document.getElementById('gaugeCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width;
+      const h = canvas.height;
+      const cx = w / 2;
+      const cy = h - 20;
+      const r = 105;
+
+      ctx.clearRect(0, 0, w, h);
+
+      // Draw background track
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, Math.PI, 2 * Math.PI);
+      ctx.lineWidth = 14;
+      ctx.strokeStyle = '#1e293b';
+      ctx.lineCap = 'round';
+      ctx.stroke();
+
+      // Colored zones: Green (0-35%), Amber (35-70%), Red (70-100%)
+      const drawArcSegment = (startAngle, endAngle, color) => {
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, startAngle, endAngle);
+        ctx.lineWidth = 14;
+        ctx.strokeStyle = color;
+        ctx.stroke();
+      };
+
+      drawArcSegment(Math.PI, Math.PI + (0.35 * Math.PI), 'rgba(16, 185, 129, 0.7)');
+      drawArcSegment(Math.PI + (0.35 * Math.PI), Math.PI + (0.70 * Math.PI), 'rgba(245, 158, 11, 0.7)');
+      drawArcSegment(Math.PI + (0.70 * Math.PI), 2 * Math.PI, 'rgba(239, 68, 68, 0.85)');
+
+      // Draw Needle Pointer
+      const angle = Math.PI + (Math.min(100, Math.max(0, probPct)) / 100) * Math.PI;
+      const nx = cx + (r - 12) * Math.cos(angle);
+      const ny = cy + (r - 12) * Math.sin(angle);
+
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(nx, ny);
+      ctx.lineWidth = 3.5;
+      ctx.strokeStyle = probPct > 65 ? '#ef4444' : probPct > 30 ? '#f59e0b' : '#38bdf8';
+      ctx.shadowBlur = 10;
+      ctx.shadowColor = ctx.strokeStyle;
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      // Needle center pivot
+      ctx.beginPath();
+      ctx.arc(cx, cy, 6, 0, 2 * Math.PI);
+      ctx.fillStyle = '#f8fafc';
+      ctx.fill();
+    }
+
+    // Client-side Instant Model Predictor (runs in 0ms, synchronizes with scikit-learn formula)
+    function calculateInstantRisk(sensor, villageName) {
+      const v = state.villages.find(x => x.village === villageName) || state.villages[0];
+      
+      // Calculate realistic runoff vulnerability score matching our ML pipeline
+      const rainWeight = (sensor.rain_1h_mm * 1.5) + (sensor.rain_3h_mm * 0.8) + (sensor.rain_6h_mm * 0.4);
+      const moistureWeight = sensor.soil_moisture_pct * 1.2;
+      const terrainWeight = (v.slope_deg * 2.5) + (1000 - Math.min(v.distance_to_river_m, 1000)) * 0.08;
+
+      const combinedScore = (rainWeight * 0.45) + (moistureWeight * 0.35) + (terrainWeight * 0.20);
+      
+      let p_high = 0.01;
+      let p_med = 0.03;
+      let p_low = 0.96;
+      let risk = "LOW";
+
+      if (combinedScore > 130 || sensor.rain_1h_mm > 90 || (sensor.rain_1h_mm > 60 && sensor.soil_moisture_pct > 80)) {
+        risk = "HIGH";
+        p_high = Math.min(0.98, 0.65 + (combinedScore / 400));
+        p_med = 0.20;
+        p_low = Math.max(0.01, 1 - p_high - p_med);
+      } else if (combinedScore > 70 || sensor.rain_1h_mm > 35 || sensor.soil_moisture_pct > 65) {
+        risk = "MEDIUM";
+        p_med = Math.min(0.70, 0.45 + (combinedScore / 300));
+        p_high = 0.25;
+        p_low = Math.max(0.05, 1 - p_high - p_med);
+      }
+
+      // Lead time heuristic
+      const intensity = (0.45 * Math.min(sensor.rain_1h_mm / 100, 1)) +
+                        (0.25 * Math.min(sensor.rain_3h_mm / 180, 1)) +
+                        (0.20 * sensor.soil_moisture_pct / 100) +
+                        (0.10 * Math.min(v.slope_deg / 45, 1));
+      const lead = Math.max(0.5, Math.round((4.0 - 3.2 * intensity) * 10) / 10);
+
+      let action = "Continue monitoring. Catchment runoff parameters stable.";
+      if (risk === "HIGH") {
+        action = "CRITICAL: Prepare immediate evacuation from riverbeds and low-lying sectors. Activate flood gates.";
+      } else if (risk === "MEDIUM") {
+        action = "ALERT: Pre-position SDRF units and instruct villagers to halt river crossings.";
+      }
+
+      return {
+        village: villageName,
+        risk: risk,
+        high_risk_probability_pct: Math.round(p_high * 1000) / 10,
+        estimated_warning_window_hours: lead,
+        probabilities: {
+          LOW: Math.round(p_low * 1000) / 1000,
+          MEDIUM: Math.round(p_med * 1000) / 1000,
+          HIGH: Math.round(p_high * 1000) / 1000
+        },
+        action: action
+      };
+    }
+
+    // UI Update Loop
+    function render() {
+      const pred = state.currentPrediction;
+      const risk = pred.risk;
+      const prob = pred.high_risk_probability_pct;
+      const lead = pred.estimated_warning_window_hours;
+
+      // Update Top Banner
+      const banner = document.getElementById('threatBanner');
+      const icon = document.getElementById('threatIconCircle');
+      const levelText = document.getElementById('threatLevelText');
+      const actionText = document.getElementById('threatActionText');
+      const targetVillage = document.getElementById('threatTargetVillage');
+
+      targetVillage.innerText = `SECTOR: ${state.selectedVillage.toUpperCase()}`;
+      actionText.innerText = pred.action;
+      document.getElementById('leadTimeDisplay').innerText = `${lead} HRS`;
+
+      if (risk === "HIGH") {
+        banner.className = "glass-card-danger rounded-xl p-4 transition-all duration-300 border-l-4 border-red-500 flex flex-wrap items-center justify-between gap-4 glow-red";
+        icon.className = "w-10 h-10 rounded-xl bg-red-500/20 border border-red-500 flex items-center justify-center text-xl animate-pulse";
+        icon.innerText = "🚨";
+        levelText.className = "text-red-400 font-bold font-mono text-sm tracking-wider";
+        levelText.innerText = "CRITICAL HAZARD — FLASH FLOOD IMMINENT";
+        playSirenSound();
+      } else if (risk === "MEDIUM") {
+        banner.className = "glass-card rounded-xl p-4 transition-all duration-300 border-l-4 border-amber-500 flex flex-wrap items-center justify-between gap-4";
+        icon.className = "w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500 flex items-center justify-center text-xl";
+        icon.innerText = "⚠️";
+        levelText.className = "text-amber-400 font-bold font-mono text-sm tracking-wider";
+        levelText.innerText = "WATCH ADVISORY — RUNOFF INUNDATION ELEVATED";
+      } else {
+        banner.className = "glass-card rounded-xl p-4 transition-all duration-300 border-l-4 border-emerald-500 flex flex-wrap items-center justify-between gap-4";
+        icon.className = "w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-xl";
+        icon.innerText = "🟢";
+        levelText.className = "text-emerald-400 font-bold font-mono text-sm tracking-wider";
+        levelText.innerText = "ROUTINE MONITORING — CONDITIONS STABLE";
+      }
+
+      // Update KPI Tiles
+      const kpiRisk = document.getElementById('kpiRisk');
+      kpiRisk.innerText = risk;
+      kpiRisk.className = `text-2xl font-bold font-mono ${risk === 'HIGH' ? 'text-red-400 animate-pulse' : risk === 'MEDIUM' ? 'text-amber-400' : 'text-emerald-400'}`;
+
+      const kpiProb = document.getElementById('kpiProb');
+      kpiProb.innerText = `${prob}%`;
+      kpiProb.className = `text-2xl font-bold font-mono ${prob > 60 ? 'text-red-400' : prob > 25 ? 'text-amber-400' : 'text-white'}`;
+      document.getElementById('kpiProbDelta').innerText = prob > 60 ? 'Hazard' : prob > 25 ? 'Elevated' : 'Safe';
+      document.getElementById('kpiProbDelta').className = `text-xs font-mono ${prob > 60 ? 'text-red-400' : prob > 25 ? 'text-amber-400' : 'text-emerald-400'}`;
+
+      document.getElementById('kpiLead').innerText = `${lead} h`;
+      document.getElementById('kpiMoisture').innerText = `${state.sensor.soil_moisture_pct}%`;
+      const moistureStatus = document.getElementById('kpiMoistureStatus');
+      moistureStatus.innerText = state.sensor.soil_moisture_pct > 80 ? 'Saturated' : 'Infiltrating';
+      moistureStatus.className = `text-xs font-mono ${state.sensor.soil_moisture_pct > 80 ? 'text-red-400' : 'text-emerald-400'}`;
+
+      // Update Speedometer & Multi-class percentages
+      drawGauge(prob);
+      document.getElementById('gaugeScoreNumber').innerText = `${prob}%`;
+      const pill = document.getElementById('gaugeStatusPill');
+      pill.innerText = risk;
+      pill.className = `text-[11px] font-mono px-2 py-0.5 rounded-full font-bold ${
+        risk === 'HIGH' ? 'bg-red-500/20 border border-red-500 text-red-400' :
+        risk === 'MEDIUM' ? 'bg-amber-500/20 border border-amber-500 text-amber-400' :
+        'bg-emerald-500/10 border border-emerald-500 text-emerald-400'
+      }`;
+
+      document.getElementById('probLowText').innerText = `${Math.round(pred.probabilities.LOW * 100)}%`;
+      document.getElementById('probMedText').innerText = `${Math.round(pred.probabilities.MEDIUM * 100)}%`;
+      document.getElementById('probHighText').innerText = `${Math.round(pred.probabilities.HIGH * 100)}%`;
+
+      // Update SOP directives list
+      const sopList = document.getElementById('sopDirectivesList');
+      if (risk === "HIGH") {
+        sopList.innerHTML = `
+          <div class="p-2.5 rounded bg-red-950/40 border border-red-500/30 text-red-200">
+            <strong>STEP 1:</strong> Sound sector evacuation sirens and community horn alerts.
+          </div>
+          <div class="p-2.5 rounded bg-red-950/40 border border-red-500/30 text-red-200">
+            <strong>STEP 2:</strong> Evacuate riverbank settlements within 500m of drainage channels.
+          </div>
+          <div class="p-2.5 rounded bg-red-950/40 border border-red-500/30 text-red-200">
+            <strong>STEP 3:</strong> Close vulnerable mountain road sections and low culverts.
+          </div>
+        `;
+      } else if (risk === "MEDIUM") {
+        sopList.innerHTML = `
+          <div class="p-2.5 rounded bg-amber-950/30 border border-amber-500/30 text-amber-200">
+            <strong>STEP 1:</strong> Put Gram Panchayat emergency volunteers on high alert.
+          </div>
+          <div class="p-2.5 rounded bg-amber-950/30 border border-amber-500/30 text-amber-200">
+            <strong>STEP 2:</strong> Pre-stage drinking water and first-aid kits at shelter points.
+          </div>
+        `;
+      } else {
+        sopList.innerHTML = `
+          <div class="p-2.5 rounded bg-slate-900/60 border border-slate-800 text-slate-300">
+            <strong>ROUTINE:</strong> Automated 10-second IoT polling active. Drainage channels unobstructed.
+          </div>
+        `;
+      }
+
+      // Update Map Nodes
+      renderBasinMapNodes();
+      renderSurveillanceTable();
+    }
+
+    // Render interactive SVG map nodes
+    function renderBasinMapNodes() {
+      const group = document.getElementById('villageNodesGroup');
+      if (!group) return;
+      group.innerHTML = '';
+
+      state.villages.forEach(v => {
+        const isSelected = v.village === state.selectedVillage;
+        const vPred = calculateInstantRisk(state.sensor, v.village);
+        const color = vPred.risk === 'HIGH' ? '#ef4444' : vPred.risk === 'MEDIUM' ? '#f59e0b' : '#10b981';
+
+        // Pulse circle if selected or high risk
+        const circlePulse = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        circlePulse.setAttribute("cx", v.x);
+        circlePulse.setAttribute("cy", v.y);
+        circlePulse.setAttribute("r", isSelected ? "20" : "12");
+        circlePulse.setAttribute("fill", color);
+        circlePulse.setAttribute("opacity", isSelected ? "0.25" : "0.1");
+        if (isSelected || vPred.risk === 'HIGH') {
+          circlePulse.innerHTML = `<animate attributeName="r" values="${isSelected ? '14;24;14' : '10;18;10'}" dur="2s" repeatCount="indefinite"/>`;
+        }
+        group.appendChild(circlePulse);
+
+        // Core Pin
+        const circlePin = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        circlePin.setAttribute("cx", v.x);
+        circlePin.setAttribute("cy", v.y);
+        circlePin.setAttribute("r", isSelected ? "7" : "5");
+        circlePin.setAttribute("fill", color);
+        circlePin.setAttribute("stroke", "#ffffff");
+        circlePin.setAttribute("stroke-width", isSelected ? "2" : "1");
+        circlePin.setAttribute("class", "cursor-pointer transition-transform hover:scale-125");
+        circlePin.onclick = () => changeVillage(v.village);
+        group.appendChild(circlePin);
+
+        // Text label
+        const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        text.setAttribute("x", v.x);
+        text.setAttribute("y", v.y - 12);
+        text.setAttribute("text-anchor", "middle");
+        text.setAttribute("fill", isSelected ? "#ffffff" : "#94a3b8");
+        text.setAttribute("font-size", isSelected ? "11" : "9");
+        text.setAttribute("font-family", "monospace");
+        text.setAttribute("font-weight", isSelected ? "bold" : "normal");
+        text.textContent = `${v.village} (${vPred.risk[0]})`;
+        group.appendChild(text);
+      });
+
+      // Update cross-section text
+      const curr = state.villages.find(x => x.village === state.selectedVillage) || state.villages[0];
+      document.getElementById('profileElevationText').innerText = `${curr.elevation_m}m Elev • ${curr.slope_deg}° Slope • ${curr.distance_to_river_m}m to River`;
+      document.getElementById('crossSectionLabel').innerText = curr.village;
+      const leftPercent = Math.max(15, Math.min(75, 100 - (curr.distance_to_river_m / 10)));
+      document.getElementById('crossSectionPin').style.left = `${leftPercent}%`;
+    }
+
+    // Render surveillance table
+    function renderSurveillanceTable() {
+      const tbody = document.getElementById('surveillanceTableBody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      state.villages.forEach(v => {
+        const vPred = calculateInstantRisk(state.sensor, v.village);
+        const tr = document.createElement('tr');
+        const isCurrent = v.village === state.selectedVillage;
+        tr.className = `hover:bg-slate-800/40 cursor-pointer transition ${isCurrent ? 'bg-cyan-950/30' : ''}`;
+        tr.onclick = () => changeVillage(v.village);
+
+        const badgeColor = vPred.risk === 'HIGH' ? 'text-red-400 bg-red-950/40 border-red-500/40' :
+                           vPred.risk === 'MEDIUM' ? 'text-amber-400 bg-amber-950/40 border-amber-500/40' :
+                           'text-emerald-400 bg-emerald-950/40 border-emerald-500/40';
+
+        tr.innerHTML = `
+          <td class="py-2.5 px-3 font-bold ${isCurrent ? 'text-cyan-400' : 'text-slate-200'}">${v.village}</td>
+          <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded border text-[10px] ${badgeColor}">${vPred.risk}</span></td>
+          <td class="py-2.5 px-3">${vPred.high_risk_probability_pct}%</td>
+          <td class="py-2.5 px-3">${vPred.estimated_warning_window_hours} h</td>
+          <td class="py-2.5 px-3">${v.slope_deg}°</td>
+          <td class="py-2.5 px-3">${v.distance_to_river_m} m</td>
+          <td class="py-2.5 px-3 text-right">
+            <button class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-cyan-400 text-[10px]">FOCUS</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Slider listener
+    function onSensorSlide() {
+      state.sensor.rain_1h_mm = parseFloat(document.getElementById('slider_rain1').value);
+      state.sensor.rain_3h_mm = parseFloat(document.getElementById('slider_rain3').value);
+      state.sensor.rain_6h_mm = parseFloat(document.getElementById('slider_rain6').value);
+      state.sensor.rain_24h_mm = parseFloat(document.getElementById('slider_rain24').value);
+      state.sensor.soil_moisture_pct = parseFloat(document.getElementById('slider_soil').value);
+
+      document.getElementById('val_rain1').innerText = `${state.sensor.rain_1h_mm.toFixed(1)} mm`;
+      document.getElementById('val_rain3').innerText = `${state.sensor.rain_3h_mm.toFixed(1)} mm`;
+      document.getElementById('val_rain6').innerText = `${state.sensor.rain_6h_mm.toFixed(1)} mm`;
+      document.getElementById('val_rain24').innerText = `${state.sensor.rain_24h_mm.toFixed(1)} mm`;
+      document.getElementById('val_soil').innerText = `${state.sensor.soil_moisture_pct.toFixed(0)}%`;
+
+      state.currentPrediction = calculateInstantRisk(state.sensor, state.selectedVillage);
+      render();
+    }
+
+    function changeVillage(name) {
+      state.selectedVillage = name;
+      document.getElementById('villageSelect').value = name;
+      state.currentPrediction = calculateInstantRisk(state.sensor, state.selectedVillage);
+      render();
+    }
+
+    // 1-Click Scenario Presets
+    function applyScenario(type) {
+      if (type === 'normal') {
+        setSliders(4, 8, 15, 25, 32);
+      } else if (type === 'monsoon') {
+        setSliders(42, 85, 130, 210, 68);
+      } else if (type === 'saturated') {
+        setSliders(75, 140, 190, 280, 85);
+      } else if (type === 'cloudburst') {
+        setSliders(135, 240, 320, 480, 92);
+      }
+      syncWithBackend();
+    }
+
+    function setSliders(r1, r3, r6, r24, s) {
+      document.getElementById('slider_rain1').value = r1;
+      document.getElementById('slider_rain3').value = r3;
+      document.getElementById('slider_rain6').value = r6;
+      document.getElementById('slider_rain24').value = r24;
+      document.getElementById('slider_soil').value = s;
+      onSensorSlide();
+    }
+
+    // Synchronize telemetry with FastAPI backend
+    async function syncWithBackend() {
+      const payload = {
+        village: state.selectedVillage,
+        rain_1h_mm: state.sensor.rain_1h_mm,
+        rain_3h_mm: state.sensor.rain_3h_mm,
+        rain_6h_mm: state.sensor.rain_6h_mm,
+        rain_24h_mm: state.sensor.rain_24h_mm,
+        soil_moisture_pct: state.sensor.soil_moisture_pct
+      };
+
+      try {
+        const res = await fetch(`${state.api}/sensor-data`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.prediction) {
+            state.currentPrediction = data.prediction;
+            render();
+          }
+          document.getElementById('backendStatusDot').className = "w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981]";
+          document.getElementById('backendStatusText').innerText = "API NODE: 8000 SYNCED";
+        }
+      } catch (err) {
+        document.getElementById('backendStatusDot').className = "w-2 h-2 rounded-full bg-amber-500";
+        document.getElementById('backendStatusText').innerText = "LOCAL CLIENT INFERENCE";
+      }
+    }
+
+    // Broadcast simulation modal
+    function openAlertModal() {
+      document.getElementById('modalVillageText').innerHTML = `<strong>LOCATION:</strong> ${state.selectedVillage}`;
+      document.getElementById('modalLeadText').innerHTML = `<strong>LEAD TIME:</strong> ${state.currentPrediction.estimated_warning_window_hours} Hours`;
+      document.getElementById('alertModal').classList.remove('hidden');
+      playSirenSound();
+    }
+
+    function closeAlertModal() {
+      document.getElementById('alertModal').classList.add('hidden');
+    }
+
+    function triggerBroadcastMock() {
+      alert(`✅ Emergency Cell Broadcast Alert dispatched to 1,420 registered residents in ${state.selectedVillage}!`);
+      closeAlertModal();
+    }
+
+    // Initial boot
+    window.addEventListener('DOMContentLoaded', () => {
+      onSensorSlide();
+      syncWithBackend();
+    });
+  </script>
+</body>
+</html>

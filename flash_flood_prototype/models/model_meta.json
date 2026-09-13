@@ -1,9 +1,5 @@
 {
-  "model_name": "random_forest",
-  "model_file": "flood_model_random_forest_20260913_151123.joblib",
-  "timestamp": "20260913_151123",
-  "training_samples": 4000,
-  "test_samples": 1000,
+  "accuracy": 0.8567,
   "features": [
     "rain_1h_mm",
     "rain_3h_mm",
@@ -15,74 +11,5 @@
     "distance_to_river_m",
     "historical_events"
   ],
-  "n_features": 9,
-  "classes": [
-    "LOW",
-    "MEDIUM",
-    "HIGH"
-  ],
-  "label_order": {
-    "LOW": 0,
-    "MEDIUM": 1,
-    "HIGH": 2
-  },
-  "cv_metrics": {
-    "accuracy_mean": 0.80175,
-    "accuracy_std": 0.008824681297361402,
-    "f1_macro_mean": 0.8062470018054482,
-    "f1_macro_std": 0.009956625060431875,
-    "f1_weighted_mean": 0.8019931405825631,
-    "f1_weighted_std": 0.008488616429780346,
-    "precision_macro_mean": 0.8077671279948373,
-    "precision_macro_std": 0.009273479832678268,
-    "recall_macro_mean": 0.8056347091766153,
-    "recall_macro_std": 0.01088434049654536,
-    "roc_auc_ovr_mean": 0.9366725573256708,
-    "roc_auc_ovr_std": 0.0,
-    "train_samples": 4000,
-    "test_samples": 1000
-  },
-  "confusion_matrix": [
-    [
-      1323,
-      286,
-      0
-    ],
-    [
-      254,
-      1299,
-      125
-    ],
-    [
-      0,
-      128,
-      585
-    ]
-  ],
-  "confusion_matrix_labels": [
-    "LOW",
-    "MEDIUM",
-    "HIGH"
-  ],
-  "best_params": {},
-  "shap_feature_importance": {},
-  "model_feature_importance": {
-    "rain_3h_mm": 0.2744208936373971,
-    "rain_6h_mm": 0.24619360458042194,
-    "rain_24h_mm": 0.1508761553368597,
-    "rain_1h_mm": 0.12123607452745742,
-    "slope_deg": 0.05572514259054349,
-    "soil_moisture_pct": 0.052361549192784816,
-    "elevation_m": 0.04513212508261104,
-    "distance_to_river_m": 0.0411167278301024,
-    "historical_events": 0.012937727221822019
-  },
-  "config": {
-    "n_splits": 5,
-    "random_state": 42,
-    "n_samples": 5000,
-    "optimize": false,
-    "n_trials": 30
-  },
   "warning": "Synthetic demonstration dataset. Not for operational use."
 }
