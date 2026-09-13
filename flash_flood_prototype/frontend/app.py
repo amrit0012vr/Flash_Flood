@@ -7,7 +7,7 @@ import folium
 from streamlit_folium import st_folium
 import plotly.graph_objects as go
 
-API = "http://127.0.0.1:8000"
+API = ("https://flash-flood.onrender.com") or ("http://127.0.0.1:8000")
 
 st.set_page_config(
     page_title="Flash Flood Early Warning",
