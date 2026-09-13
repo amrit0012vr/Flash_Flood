@@ -475,7 +475,9 @@
   <script>
     // State Store
     const state = {
-      api: "http://127.0.0.1:8000",
+      api: (window.location.protocol.startsWith('http') && !window.location.hostname.includes('github.io')) 
+        ? window.location.origin 
+        : "http://127.0.0.1:8000",
       audioEnabled: true,
       selectedVillage: "Village A",
       villages: [
