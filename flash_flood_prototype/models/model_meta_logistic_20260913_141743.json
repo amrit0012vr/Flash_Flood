@@ -1,0 +1,77 @@
+{
+  "model_name": "logistic",
+  "model_file": "flood_model_logistic_20260913_141743.joblib",
+  "timestamp": "20260913_141743",
+  "training_samples": 2400,
+  "test_samples": 600,
+  "features": [
+    "rain_1h_mm",
+    "rain_3h_mm",
+    "rain_6h_mm",
+    "rain_24h_mm",
+    "soil_moisture_pct",
+    "slope_deg",
+    "elevation_m",
+    "distance_to_river_m",
+    "historical_events"
+  ],
+  "n_features": 9,
+  "classes": [
+    "LOW",
+    "MEDIUM",
+    "HIGH"
+  ],
+  "label_order": {
+    "LOW": 0,
+    "MEDIUM": 1,
+    "HIGH": 2
+  },
+  "cv_metrics": {
+    "accuracy_mean": 0.80625,
+    "accuracy_std": 0.013944333775567945,
+    "f1_macro_mean": 0.8082126666661391,
+    "f1_macro_std": 0.013766051732961433,
+    "f1_weighted_mean": 0.8052933395209714,
+    "f1_weighted_std": 0.013925543696339355,
+    "precision_macro_mean": 0.800549101533196,
+    "precision_macro_std": 0.01567192618883215,
+    "recall_macro_mean": 0.8214442965400532,
+    "recall_macro_std": 0.01634976926550888,
+    "roc_auc_ovr_mean": 0.9411184518997363,
+    "roc_auc_ovr_std": 0.0,
+    "train_samples": 2400,
+    "test_samples": 600
+  },
+  "confusion_matrix": [
+    [
+      809,
+      144,
+      0
+    ],
+    [
+      155,
+      761,
+      115
+    ],
+    [
+      0,
+      51,
+      365
+    ]
+  ],
+  "confusion_matrix_labels": [
+    "LOW",
+    "MEDIUM",
+    "HIGH"
+  ],
+  "best_params": {},
+  "shap_feature_importance": {},
+  "config": {
+    "n_splits": 5,
+    "random_state": 42,
+    "n_samples": 3000,
+    "optimize": false,
+    "n_trials": 30
+  },
+  "warning": "Synthetic demonstration dataset. Not for operational use."
+}

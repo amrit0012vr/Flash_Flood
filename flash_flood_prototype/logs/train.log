@@ -1,0 +1,278 @@
+2026-09-13 13:36:52,901 | INFO     | Starting training with args: {'n_samples': 3000, 'model': 'auto', 'optimize': False, 'n_trials': 30, 'calibrate': True, 'seed': 42, 'save_data': False}
+2026-09-13 13:36:52,919 | INFO     | Generated 3000 samples | Class distribution:
+risk
+MEDIUM    1289
+LOW       1191
+HIGH       520
+Name: count, dtype: int64
+2026-09-13 13:36:52,936 | INFO     | 
+==================================================
+2026-09-13 13:36:52,936 | INFO     | Evaluating logistic...
+2026-09-13 13:36:52,936 | INFO     | ==================================================
+2026-09-13 13:36:59,126 | INFO     | logistic CV macro F1: nan
+2026-09-13 13:36:59,126 | INFO     | 
+==================================================
+2026-09-13 13:36:59,126 | INFO     | Evaluating random_forest...
+2026-09-13 13:36:59,126 | INFO     | ==================================================
+2026-09-13 13:37:02,394 | INFO     | random_forest CV macro F1: nan
+2026-09-13 13:37:02,394 | INFO     | 
+==================================================
+2026-09-13 13:37:02,394 | INFO     | Evaluating xgboost...
+2026-09-13 13:37:02,394 | INFO     | ==================================================
+2026-09-13 13:44:17,908 | INFO     | Starting training with args: {'n_samples': 3000, 'model': 'auto', 'optimize': False, 'n_trials': 30, 'calibrate': True, 'seed': 42, 'save_data': False}
+2026-09-13 13:44:17,913 | INFO     | Generated 3000 samples | Class distribution:
+risk
+MEDIUM    1289
+LOW       1191
+HIGH       520
+Name: count, dtype: int64
+2026-09-13 13:44:17,921 | INFO     | 
+==================================================
+2026-09-13 13:44:17,921 | INFO     | Evaluating logistic...
+2026-09-13 13:44:17,921 | INFO     | ==================================================
+2026-09-13 13:44:23,949 | INFO     | logistic CV macro F1: nan
+2026-09-13 13:44:23,949 | INFO     | 
+==================================================
+2026-09-13 13:44:23,949 | INFO     | Evaluating random_forest...
+2026-09-13 13:44:23,949 | INFO     | ==================================================
+2026-09-13 13:44:27,176 | INFO     | random_forest CV macro F1: nan
+2026-09-13 13:44:27,176 | INFO     | 
+==================================================
+2026-09-13 13:44:27,176 | INFO     | Evaluating xgboost...
+2026-09-13 13:44:27,176 | INFO     | ==================================================
+2026-09-13 13:49:42,361 | INFO     | Starting training with args: {'n_samples': 3000, 'model': 'auto', 'optimize': False, 'n_trials': 30, 'calibrate': True, 'seed': 42, 'save_data': False}
+2026-09-13 13:49:42,366 | INFO     | Generated 3000 samples | Class distribution:
+risk
+MEDIUM    1289
+LOW       1191
+HIGH       520
+Name: count, dtype: int64
+2026-09-13 13:49:42,374 | INFO     | 
+==================================================
+2026-09-13 13:49:42,374 | INFO     | Evaluating logistic...
+2026-09-13 13:49:42,374 | INFO     | ==================================================
+2026-09-13 13:52:58,468 | INFO     | Starting training with args: {'n_samples': 3000, 'model': 'auto', 'optimize': False, 'n_trials': 30, 'calibrate': True, 'seed': 42, 'save_data': False}
+2026-09-13 13:52:58,475 | INFO     | Generated 3000 samples | Class distribution:
+risk
+MEDIUM    1289
+LOW       1191
+HIGH       520
+Name: count, dtype: int64
+2026-09-13 13:52:58,484 | INFO     | 
+==================================================
+2026-09-13 13:52:58,484 | INFO     | Evaluating logistic...
+2026-09-13 13:52:58,484 | INFO     | ==================================================
+2026-09-13 13:53:05,192 | WARNING  | ROC-AUC computation failed: np.int64(0)
+2026-09-13 13:53:07,027 | INFO     | logistic CV macro F1: 0.8082
+2026-09-13 13:53:07,027 | INFO     | 
+==================================================
+2026-09-13 13:53:07,027 | INFO     | Evaluating random_forest...
+2026-09-13 13:53:07,027 | INFO     | ==================================================
+2026-09-13 13:53:14,023 | WARNING  | ROC-AUC computation failed: np.int64(0)
+2026-09-13 13:53:16,439 | INFO     | random_forest CV macro F1: 0.8022
+2026-09-13 13:53:16,439 | INFO     | 
+==================================================
+2026-09-13 13:53:16,439 | INFO     | Evaluating xgboost...
+2026-09-13 13:53:16,439 | INFO     | ==================================================
+2026-09-13 13:53:26,493 | WARNING  | ROC-AUC computation failed: np.int64(0)
+2026-09-13 13:53:29,785 | INFO     | xgboost CV macro F1: 0.7998
+2026-09-13 13:53:29,785 | INFO     | 
+Best model: logistic (macro F1: 0.8082)
+2026-09-13 14:03:24,414 | INFO     | Starting training with args: {'n_samples': 3000, 'model': 'auto', 'optimize': False, 'n_trials': 30, 'calibrate': True, 'seed': 42, 'save_data': False}
+2026-09-13 14:03:24,419 | INFO     | Generated 3000 samples | Class distribution:
+risk
+MEDIUM    1289
+LOW       1191
+HIGH       520
+Name: count, dtype: int64
+2026-09-13 14:03:24,428 | INFO     | 
+==================================================
+2026-09-13 14:03:24,428 | INFO     | Evaluating logistic...
+2026-09-13 14:03:24,429 | INFO     | ==================================================
+2026-09-13 14:03:30,844 | WARNING  | ROC-AUC computation failed: np.int64(0)
+2026-09-13 14:03:32,694 | INFO     | logistic CV macro F1: 0.8082
+2026-09-13 14:03:32,694 | INFO     | 
+==================================================
+2026-09-13 14:03:32,694 | INFO     | Evaluating random_forest...
+2026-09-13 14:03:32,694 | INFO     | ==================================================
+2026-09-13 14:03:39,627 | WARNING  | ROC-AUC computation failed: np.int64(0)
+2026-09-13 14:03:42,030 | INFO     | random_forest CV macro F1: 0.8022
+2026-09-13 14:03:42,030 | INFO     | 
+==================================================
+2026-09-13 14:03:42,031 | INFO     | Evaluating xgboost...
+2026-09-13 14:03:42,031 | INFO     | ==================================================
+2026-09-13 14:03:51,918 | WARNING  | ROC-AUC computation failed: np.int64(0)
+2026-09-13 14:03:55,282 | INFO     | xgboost CV macro F1: 0.7998
+2026-09-13 14:03:55,282 | INFO     | 
+Best model: logistic (macro F1: 0.8082)
+2026-09-13 14:06:55,404 | INFO     | Starting training with args: {'n_samples': 3000, 'model': 'auto', 'optimize': False, 'n_trials': 30, 'calibrate': True, 'seed': 42, 'save_data': False}
+2026-09-13 14:06:55,410 | INFO     | Generated 3000 samples | Class distribution:
+risk
+MEDIUM    1289
+LOW       1191
+HIGH       520
+Name: count, dtype: int64
+2026-09-13 14:06:55,419 | INFO     | 
+==================================================
+2026-09-13 14:06:55,419 | INFO     | Evaluating logistic...
+2026-09-13 14:06:55,419 | INFO     | ==================================================
+2026-09-13 14:07:02,082 | WARNING  | ROC-AUC computation failed: np.int64(0)
+2026-09-13 14:07:03,955 | INFO     | logistic CV macro F1: 0.8082
+2026-09-13 14:07:03,955 | INFO     | 
+==================================================
+2026-09-13 14:07:03,956 | INFO     | Evaluating random_forest...
+2026-09-13 14:07:03,956 | INFO     | ==================================================
+2026-09-13 14:07:11,179 | WARNING  | ROC-AUC computation failed: np.int64(0)
+2026-09-13 14:07:13,525 | INFO     | random_forest CV macro F1: 0.8022
+2026-09-13 14:07:13,525 | INFO     | 
+==================================================
+2026-09-13 14:07:13,525 | INFO     | Evaluating xgboost...
+2026-09-13 14:07:13,525 | INFO     | ==================================================
+2026-09-13 14:07:24,150 | WARNING  | ROC-AUC computation failed: np.int64(0)
+2026-09-13 14:07:27,689 | INFO     | xgboost CV macro F1: 0.7998
+2026-09-13 14:07:27,689 | INFO     | 
+Best model: logistic (macro F1: 0.8082)
+2026-09-13 14:11:15,164 | INFO     | Starting training with args: {'n_samples': 3000, 'model': 'auto', 'optimize': False, 'n_trials': 30, 'calibrate': True, 'seed': 42, 'save_data': False}
+2026-09-13 14:11:15,171 | INFO     | Generated 3000 samples | Class distribution:
+risk
+MEDIUM    1289
+LOW       1191
+HIGH       520
+Name: count, dtype: int64
+2026-09-13 14:11:15,180 | INFO     | 
+==================================================
+2026-09-13 14:11:15,181 | INFO     | Evaluating logistic...
+2026-09-13 14:11:15,181 | INFO     | ==================================================
+2026-09-13 14:11:21,171 | INFO     | logistic CV macro F1: 0.8082
+2026-09-13 14:11:21,172 | INFO     | 
+==================================================
+2026-09-13 14:11:21,172 | INFO     | Evaluating random_forest...
+2026-09-13 14:11:21,172 | INFO     | ==================================================
+2026-09-13 14:11:24,194 | INFO     | random_forest CV macro F1: 0.8022
+2026-09-13 14:11:24,194 | INFO     | 
+==================================================
+2026-09-13 14:11:24,194 | INFO     | Evaluating xgboost...
+2026-09-13 14:11:24,194 | INFO     | ==================================================
+2026-09-13 14:11:29,938 | INFO     | xgboost CV macro F1: 0.7998
+2026-09-13 14:11:29,938 | INFO     | 
+Best model: logistic (macro F1: 0.8082)
+2026-09-13 14:11:29,963 | INFO     | Skipping calibration (using native probabilities)
+2026-09-13 14:11:29,963 | WARNING  | SHAP not available, skipping explainability
+2026-09-13 14:11:29,979 | INFO     | Saved model: C:\Users\Amrit\Desktop\flash_flood_prediction_prototype\flash_flood_prototype\models\flood_model_logistic_20260913_141129.joblib
+2026-09-13 14:11:29,980 | INFO     | Saved metadata: C:\Users\Amrit\Desktop\flash_flood_prediction_prototype\flash_flood_prototype\models\model_meta_logistic_20260913_141129.json
+2026-09-13 14:11:29,980 | INFO     | Updated symlinks: C:\Users\Amrit\Desktop\flash_flood_prediction_prototype\flash_flood_prototype\models\flood_model.joblib, C:\Users\Amrit\Desktop\flash_flood_prediction_prototype\flash_flood_prototype\models\model_meta.json
+2026-09-13 14:11:29,980 | INFO     | Training complete!
+2026-09-13 14:17:27,971 | INFO     | Starting training with args: {'n_samples': 3000, 'model': 'auto', 'optimize': False, 'n_trials': 30, 'seed': 42, 'save_data': False}
+2026-09-13 14:17:27,977 | INFO     | Generated 3000 samples | Class distribution:
+risk
+MEDIUM    1289
+LOW       1191
+HIGH       520
+Name: count, dtype: int64
+2026-09-13 14:17:27,987 | INFO     | 
+==================================================
+2026-09-13 14:17:27,987 | INFO     | Evaluating logistic...
+2026-09-13 14:17:27,987 | INFO     | ==================================================
+2026-09-13 14:17:33,910 | INFO     | logistic CV macro F1: 0.8082
+2026-09-13 14:17:33,911 | INFO     | 
+==================================================
+2026-09-13 14:17:33,911 | INFO     | Evaluating random_forest...
+2026-09-13 14:17:33,911 | INFO     | ==================================================
+2026-09-13 14:17:37,372 | INFO     | random_forest CV macro F1: 0.8022
+2026-09-13 14:17:37,372 | INFO     | 
+==================================================
+2026-09-13 14:17:37,372 | INFO     | Evaluating xgboost...
+2026-09-13 14:17:37,372 | INFO     | ==================================================
+2026-09-13 14:17:43,646 | INFO     | xgboost CV macro F1: 0.7998
+2026-09-13 14:17:43,646 | INFO     | 
+Best model: logistic (macro F1: 0.8082)
+2026-09-13 14:17:43,671 | WARNING  | SHAP not available, skipping explainability
+2026-09-13 14:17:43,685 | INFO     | Saved model: C:\Users\Amrit\Desktop\flash_flood_prediction_prototype\flash_flood_prototype\models\flood_model_logistic_20260913_141743.joblib
+2026-09-13 14:17:43,685 | INFO     | Saved metadata: C:\Users\Amrit\Desktop\flash_flood_prediction_prototype\flash_flood_prototype\models\model_meta_logistic_20260913_141743.json
+2026-09-13 14:17:43,685 | INFO     | Updated symlinks: C:\Users\Amrit\Desktop\flash_flood_prediction_prototype\flash_flood_prototype\models\flood_model.joblib, C:\Users\Amrit\Desktop\flash_flood_prediction_prototype\flash_flood_prototype\models\model_meta.json
+2026-09-13 14:17:43,685 | INFO     | Training complete!
+2026-09-13 14:50:43,983 | INFO     | Starting training with args: {'n_samples': 3000, 'model': 'auto', 'optimize': False, 'n_trials': 30, 'seed': 42, 'save_data': True}
+2026-09-13 14:50:43,986 | INFO     | Generated 3000 samples | Class distribution:
+risk
+MEDIUM    1289
+LOW       1191
+HIGH       520
+Name: count, dtype: int64
+2026-09-13 14:50:44,017 | INFO     | Saved training data to C:\Users\Amrit\Desktop\flash_flood_prediction_prototype\flash_flood_prototype\data\training_data.csv
+2026-09-13 14:50:44,021 | INFO     | 
+==================================================
+2026-09-13 14:50:44,021 | INFO     | Evaluating logistic...
+2026-09-13 14:50:44,021 | INFO     | ==================================================
+2026-09-13 14:50:49,472 | INFO     | logistic CV macro F1: 0.8082
+2026-09-13 14:50:49,472 | INFO     | 
+==================================================
+2026-09-13 14:50:49,472 | INFO     | Evaluating random_forest...
+2026-09-13 14:50:49,472 | INFO     | ==================================================
+2026-09-13 14:50:52,818 | INFO     | random_forest CV macro F1: 0.8022
+2026-09-13 14:50:52,818 | INFO     | 
+==================================================
+2026-09-13 14:50:52,818 | INFO     | Evaluating xgboost...
+2026-09-13 14:50:52,818 | INFO     | ==================================================
+2026-09-13 14:50:58,874 | INFO     | xgboost CV macro F1: 0.7998
+2026-09-13 14:50:58,874 | INFO     | 
+Best model: logistic (macro F1: 0.8082)
+2026-09-13 14:53:12,881 | INFO     | Starting training with args: {'n_samples': 3000, 'model': 'auto', 'optimize': False, 'n_trials': 30, 'seed': 42, 'save_data': True}
+2026-09-13 14:53:12,887 | INFO     | Generated 3000 samples | Class distribution:
+risk
+MEDIUM    1289
+LOW       1191
+HIGH       520
+Name: count, dtype: int64
+2026-09-13 14:53:12,926 | INFO     | Saved training data to C:\Users\Amrit\Desktop\flash_flood_prediction_prototype\flash_flood_prototype\data\training_data.csv
+2026-09-13 14:53:12,931 | INFO     | 
+==================================================
+2026-09-13 14:53:12,932 | INFO     | Evaluating logistic...
+2026-09-13 14:53:12,932 | INFO     | ==================================================
+2026-09-13 14:53:18,459 | INFO     | logistic CV macro F1: 0.8082
+2026-09-13 14:53:18,459 | INFO     | 
+==================================================
+2026-09-13 14:53:18,459 | INFO     | Evaluating random_forest...
+2026-09-13 14:53:18,459 | INFO     | ==================================================
+2026-09-13 14:53:21,842 | INFO     | random_forest CV macro F1: 0.8022
+2026-09-13 14:53:21,842 | INFO     | 
+==================================================
+2026-09-13 14:53:21,842 | INFO     | Evaluating xgboost...
+2026-09-13 14:53:21,842 | INFO     | ==================================================
+2026-09-13 14:53:28,372 | INFO     | xgboost CV macro F1: 0.7998
+2026-09-13 14:53:28,372 | INFO     | 
+Best model: logistic (macro F1: 0.8082)
+2026-09-13 14:53:28,402 | WARNING  | SHAP not available, skipping explainability
+2026-09-13 14:53:28,417 | INFO     | Saved model: C:\Users\Amrit\Desktop\flash_flood_prediction_prototype\flash_flood_prototype\models\flood_model_logistic_20260913_145328.joblib
+2026-09-13 14:53:28,417 | INFO     | Saved metadata: C:\Users\Amrit\Desktop\flash_flood_prediction_prototype\flash_flood_prototype\models\model_meta_logistic_20260913_145328.json
+2026-09-13 14:53:28,417 | INFO     | Updated symlinks: C:\Users\Amrit\Desktop\flash_flood_prediction_prototype\flash_flood_prototype\models\flood_model.joblib, C:\Users\Amrit\Desktop\flash_flood_prediction_prototype\flash_flood_prototype\models\model_meta.json
+2026-09-13 14:53:28,417 | INFO     | Training complete!
+2026-09-13 15:11:05,249 | INFO     | Starting training with args: {'n_samples': 5000, 'model': 'auto', 'optimize': False, 'n_trials': 30, 'seed': 42, 'save_data': True}
+2026-09-13 15:11:05,254 | INFO     | Generated 5000 samples | Class distribution:
+risk
+MEDIUM    2098
+LOW       2011
+HIGH       891
+Name: count, dtype: int64
+2026-09-13 15:11:05,299 | INFO     | Saved training data to C:\Users\Amrit\Desktop\flash_flood_prediction_prototype\flash_flood_prototype\data\training_data.csv
+2026-09-13 15:11:05,307 | INFO     | 
+==================================================
+2026-09-13 15:11:05,307 | INFO     | Evaluating logistic...
+2026-09-13 15:11:05,307 | INFO     | ==================================================
+2026-09-13 15:11:10,408 | INFO     | logistic CV macro F1: 0.8035
+2026-09-13 15:11:10,408 | INFO     | 
+==================================================
+2026-09-13 15:11:10,408 | INFO     | Evaluating random_forest...
+2026-09-13 15:11:10,408 | INFO     | ==================================================
+2026-09-13 15:11:15,150 | INFO     | random_forest CV macro F1: 0.8062
+2026-09-13 15:11:15,150 | INFO     | 
+==================================================
+2026-09-13 15:11:15,150 | INFO     | Evaluating xgboost...
+2026-09-13 15:11:15,150 | INFO     | ==================================================
+2026-09-13 15:11:22,762 | INFO     | xgboost CV macro F1: 0.8011
+2026-09-13 15:11:22,763 | INFO     | 
+Best model: random_forest (macro F1: 0.8062)
+2026-09-13 15:11:23,202 | WARNING  | SHAP not available, skipping explainability
+2026-09-13 15:11:23,470 | INFO     | Saved model: C:\Users\Amrit\Desktop\flash_flood_prediction_prototype\flash_flood_prototype\models\flood_model_random_forest_20260913_151123.joblib
+2026-09-13 15:11:23,471 | INFO     | Saved metadata: C:\Users\Amrit\Desktop\flash_flood_prediction_prototype\flash_flood_prototype\models\model_meta_random_forest_20260913_151123.json
+2026-09-13 15:11:23,471 | INFO     | Updated symlinks: C:\Users\Amrit\Desktop\flash_flood_prediction_prototype\flash_flood_prototype\models\flood_model.joblib, C:\Users\Amrit\Desktop\flash_flood_prediction_prototype\flash_flood_prototype\models\model_meta.json
+2026-09-13 15:11:23,471 | INFO     | Training complete!

@@ -1,0 +1,23 @@
+# Core dependencies
+numpy>=1.24.0
+pandas>=2.0.0
+scikit-learn>=1.3.0
+joblib>=1.3.0
+scipy>=1.10.0
+
+# API
+fastapi>=0.100.0
+uvicorn>=0.23.0
+pydantic>=2.0.0
+
+# Frontend
+streamlit>=1.25.0
+folium>=0.14.0
+streamlit-folium>=0.13.0
+plotly>=5.15.0
+requests>=2.31.0
+
+# ML enhancements (optional)
+xgboost>=2.0.0
+shap>=0.42.0
+optuna>=3.3.0

@@ -1,0 +1,9 @@
+village,latitude,longitude,elevation_m,slope_deg,distance_to_river_m,historical_events
+Village A,30.3165,78.0322,640,12,1800,2
+Village B,30.3250,78.0480,820,22,900,4
+Village C,30.3370,78.0610,1120,31,500,6
+Village D,30.3480,78.0780,1450,38,280,8
+Village E,30.3600,78.0940,1750,44,420,7
+Village F,30.3720,78.1100,2050,52,700,5
+Village G,30.3840,78.1260,1280,28,350,6
+Village H,30.3960,78.1420,980,19,1200,3
