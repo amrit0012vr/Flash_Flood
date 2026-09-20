@@ -28,7 +28,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-model_bundle = None
+model_bundle = None 
 villages = []
 live = {}
 

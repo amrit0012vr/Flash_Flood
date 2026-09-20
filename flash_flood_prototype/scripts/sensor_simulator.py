@@ -2,10 +2,10 @@ import time
 import random
 import requests
 
-API = "http://127.0.0.1:8000"
+API = "https://flash-flood.onrender.com"
 VILLAGE = "Village C"
 
-print("Starting simulated IoT sensor. Press Ctrl+C to stop.")
+print("Starting simulated IoT sensor. Press Ctrl+C to stop.") 
 
 while True:
     # Slowly vary conditions so the dashboard feels live.

@@ -8,7 +8,7 @@ from streamlit_folium import st_folium
 import plotly.graph_objects as go
 
 API = ("https://flash-flood.onrender.com") 
-
+ 
 st.set_page_config(
     page_title="Flash Flood Early Warning",
     page_icon="🌧️",
