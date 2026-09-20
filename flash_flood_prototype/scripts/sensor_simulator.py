@@ -2,7 +2,7 @@ import time
 import random
 import requests
 
-API = "https://flash-flood.onrender.com"
+API = "http://127.0.0.1:8000"  
 VILLAGE = "Village C"
 
 print("Starting simulated IoT sensor. Press Ctrl+C to stop.") 
