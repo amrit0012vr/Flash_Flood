@@ -33,7 +33,7 @@ villages = api_get("/villages")
 names = [v["village"] for v in villages]
  
 with st.sidebar:
-    st.link_button("⚡ Open Flagship Command Center", "http://127.0.0.1:8000", use_container_width=True)
+    st.link_button("⚡ Open Flagship Command Center", "https://flash-flood.onrender.com", use_container_width=True)
     st.divider()
     st.header("🎛️ Controls")
     selected = st.selectbox("Select village", names)
