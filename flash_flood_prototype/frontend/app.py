@@ -18,7 +18,7 @@ st.set_page_config(
 )
 
 st.title("🌧️ Flash Flood Prediction & Early Warning System")
-st.caption("Problem Statement 26192 • Hyper-local hilly-region risk prototype")
+st.caption("Hyper-local hilly-region risk prototype")
 
 def api_get(path):
     try:
